@@ -1,4 +1,4 @@
-name: update jds
+name: main
 
 on:
   schedule:
