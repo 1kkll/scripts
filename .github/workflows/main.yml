@@ -37,7 +37,6 @@ jobs:
     - name: Copy and modify the script
       run: |
         cp ../AutoSpy/config/Faker.spy scripts
-        cd scripts
         sed -i 's/Script: /Script: shufflewzc_faker2_main\//g' Faker.spy
         
     - name: Commit changes and push to the repository
