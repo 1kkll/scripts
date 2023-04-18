@@ -1,0 +1,47 @@
+name: update jds
+
+on:
+  schedule:
+    # 按照UTC时间，每天凌晨0点和12点运行
+    - cron: '0 8/12 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-script:
+    runs-on: ubuntu-latest
+    
+    steps:     
+    - name: Set up Git
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'  # 需要Python 3.x版本来使用Git
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # 使用GitHub API访问令牌
+               
+    - name: Checkout the repository
+      uses: actions/checkout@v2
+      with:
+        ref: main
+        fetch-depth: 1
+        
+    - name: Git Config
+      run: |
+        git config user.name "jjkk"
+        git config user.email "jjkk@ggkk.com"
+        
+    - name: git clone project
+      run: |
+        cd ..
+        git clone --depth 1 https://github.com/shufflewzc/AutoSpy.git
+             
+    - name: Copy and modify the script
+      run: |
+        cp ../AutoSpy/config/Faker.spy scripts
+        cd scripts
+        sed -i 's/Script: /Script: shufflewzc_faker2_main\//g' Faker.spy
+        
+    - name: Commit changes and push to the repository
+      run: |
+        git add .
+        git commit -m "Update files" || true
+        git push origin main
